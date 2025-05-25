@@ -13,7 +13,7 @@ const generateTokens = (username, jti) => {
         { username, jti },
         process.env.REFRESH_TOKEN_SECRET,
         {
-            expiresIn: "1d",
+            expiresIn: "15m",
         }
     );
 
