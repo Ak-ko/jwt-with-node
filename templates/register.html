@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+  </head>
+  <body>
+    <h1>Register Form</h1>
+    <form>
+      <div>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <div>
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="confirmPassword"
+          id="confirmPassword"
+          name="confirmPassword"
+          required
+        />
+      </div>
+      <div>
+        <button type="submit">Register</button>
+      </div>
+    </form>
+
+    <script>
+      const api = "http://localhost:3000";
+
+      const form = document.querySelector("form");
+
+      function validateForm(formData) {
+        if (
+          formData.get("username") === "" ||
+          formData.get("password") === ""
+        ) {
+          alert("Please fill in all fields");
+          return false;
+        }
+
+        if (formData.get("password") !== formData.get("confirmPassword")) {
+          alert("Passwords do not match");
+          return false;
+        }
+
+        return true;
+      }
+
+      async function register(formData) {
+        const res = await fetch(`${api}/api/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-device-id": "some-uuid-or-device-id",
+            "x-platform": navigator.platform,
+          },
+          body: JSON.stringify({
+            username: formData.get("username"),
+            password: formData.get("password"),
+          }),
+        });
+      }
+
+      async function submitForm(e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        if (!validateForm(formData)) return;
+
+        await register(formData);
+      }
+
+      form.addEventListener("submit", submitForm);
+    </script>
+  </body>
+</html>
