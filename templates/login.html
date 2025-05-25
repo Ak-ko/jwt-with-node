@@ -50,6 +50,8 @@
             password: formData.get("password"),
           }),
         });
+
+        return res.json();
       }
 
       async function submitForm(e) {
@@ -59,7 +61,17 @@
 
         if (!validateForm(formData)) return;
 
-        await login(formData);
+        const { data } = await login(formData);
+
+        const { accessToken, refreshToken } = data;
+
+        if (accessToken && refreshToken) {
+          localStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("refreshToken", refreshToken);
+
+          // redirect to home page
+          window.location.href = "index.html";
+        }
       }
 
       form.addEventListener("submit", submitForm);

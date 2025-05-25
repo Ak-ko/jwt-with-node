@@ -8,8 +8,6 @@ const users = [
     },
 ];
 
-console.log({ sessions });
-
 module.exports = {
     sessions,
     users,

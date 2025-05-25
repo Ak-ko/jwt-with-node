@@ -5,7 +5,7 @@ const generateTokens = (username, jti) => {
         { username },
         process.env.ACCESS_TOKEN_SECRET,
         {
-            expiresIn: "15m",
+            expiresIn: "5000ms",
         }
     );
 
@@ -24,11 +24,25 @@ const generateTokens = (username, jti) => {
 };
 
 const decryptAccessToken = async (token) => {
-    return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    try {
+        return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+        if (err.name === "TokenExpiredError") {
+            return false;
+        }
+        return false;
+    }
 };
 
 const decryptRefreshToken = async (token) => {
-    return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+    try {
+        return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+    } catch (err) {
+        if (err.name === "TokenExpiredError") {
+            return false;
+        }
+        return false;
+    }
 };
 
 module.exports = {
