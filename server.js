@@ -128,15 +128,13 @@ app.post("/api/refresh-token", async (req, res, next) => {
             });
         }
 
-        console.log("FOUND SESSION", { foundSession });
-
-        const { refreshToken: _refreshToken, accessToken } = generateTokens(
+        const { accessToken } = generateTokens(
             username,
             foundSession.payload.jti
         );
 
         res.json({
-            data: { accessToken, refreshToken: _refreshToken },
+            data: { accessToken },
         });
     } catch (e) {
         next(e);

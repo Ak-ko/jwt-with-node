@@ -52,7 +52,6 @@
 
       const data = await res.json();
       localStorage.setItem("accessToken", data.data.accessToken);
-      localStorage.setItem("refreshToken", data.data.refreshToken);
       return data.data.accessToken;
     }
 

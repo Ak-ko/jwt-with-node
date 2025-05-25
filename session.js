@@ -35,6 +35,7 @@ const createSession = async (username, jti, refreshToken, metadata) => {
 
 const getSession = async (username, jti, refreshToken) => {
     let cachedSessionData = await getCacheSession(username, jti);
+    console.log("CACHE SESSION", cachedSessionData);
 
     if (!cachedSessionData) {
         const dbSession = sessions.find((session) => {
@@ -50,6 +51,8 @@ const getSession = async (username, jti, refreshToken) => {
             return false;
         }
 
+        console.log("DB SESSION", dbSession);
+
         cachedSessionData = {
             refreshToken: dbSession.refreshToken,
             device: dbSession.device,
@@ -62,12 +65,12 @@ const getSession = async (username, jti, refreshToken) => {
     }
 
     if (cachedSessionData.refreshToken !== refreshToken) {
-        throw { message: "Invalid refresh token in cache" };
+        return false;
     }
 
     if (new Date(cachedSessionData.expiresAt) < new Date()) {
         await removeCachedSession(username, jti);
-        throw { message: "Session expired" };
+        return false;
     }
 
     const payload = { username, jti };
