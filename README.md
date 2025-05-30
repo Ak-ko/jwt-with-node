@@ -4,7 +4,7 @@
 
 ### Frontend with normal live server for html templates
 
-### Backend, just run
+### Backend, just run this command.
 ```
 npm install
 ```
